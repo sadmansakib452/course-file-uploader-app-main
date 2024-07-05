@@ -15,6 +15,7 @@ import Step9 from "../../components/form-steps/Step9";
 import Step10 from "../../components/form-steps/Step10";
 import Step11 from "../../components/form-steps/Step11";
 import useFormStore from "@/store/useFormStore";
+import ThankYou from "@/components/ThankYou";
 
 const MultiStepForm = () => {
   const { step, formData, setStep } = useFormStore();
@@ -95,7 +96,7 @@ const MultiStepForm = () => {
       case 10:
         return <Step10 nextStep={nextStep} prevStep={prevStep} />;
       case 11:
-        return <Step11 prevStep={prevStep} />;
+        return <ThankYou />;
       default:
         return <Step1 nextStep={nextStep} prevStep={prevStep} />;
     }
@@ -116,20 +117,18 @@ const MultiStepForm = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-2xl border border-gray-300 rounded shadow-lg bg-white">
-        <motion.div
-          id="step-container"
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={transition}
-          key={step}
-          className="p-6 sm:p-8"
-          style={{ minHeight: contentHeight }}
-        >
-          {renderStep()}
-        </motion.div>
-      </div>
+      <motion.div
+        className="w-full max-w-2xl border border-gray-300 rounded shadow-lg bg-white p-6 sm:p-8"
+        id="step-container"
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -100 }}
+        transition={transition}
+        key={step}
+        style={{ minHeight: contentHeight }}
+      >
+        <div>{renderStep()}</div>
+      </motion.div>
     </div>
   );
 };

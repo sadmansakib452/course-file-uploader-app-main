@@ -10,11 +10,9 @@ import Button from "@/components/Button";
 import DropzoneInput from "@/components/Forms/DropzoneInput";
 
 import Textarea from "../Textarea";
-import InstructorFeedback from "../InstructorFeedback";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { HiExclamationCircle } from "react-icons/hi";
 
 
 
@@ -28,18 +26,17 @@ export default function Step3({ nextStep, prevStep }) {
     defaultValues: formData.stepThree || {},
   });
 
-   
   const { handleSubmit, setValue, getValues } = methods;
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data)
     setData({ step: 3, data });
     nextStep();
   };
 
   return (
     <>
-      <Seo templateTitle="Step 3" />
+      <Seo templateTitle="Step 2" />
 
       <main>
         <section className="bg-white">
@@ -52,7 +49,7 @@ export default function Step3({ nextStep, prevStep }) {
                 type="button"
                 onClick={() => {
                   setIsPdfUpload(true);
-                  setValue("feedbackFormPdf", ""); // Clear text editor content when switching
+                  setValue("text_area", ""); // Clear text editor content when switching
                 }}
                 disabled={isPdfUpload}
               >
@@ -62,11 +59,11 @@ export default function Step3({ nextStep, prevStep }) {
                 type="button"
                 onClick={() => {
                   setIsPdfUpload(false);
-                  setValue("feedbackForm", null); // Clear file input when switching
+                  setValue("obeSheet_summary", null); // Clear file input when switching
                 }}
                 disabled={!isPdfUpload}
               >
-                Form
+                Text Editor
               </Button>
             </div>
 
@@ -77,12 +74,12 @@ export default function Step3({ nextStep, prevStep }) {
               >
                 {isPdfUpload ? (
                   <Controller
-                    name="f"
+                    name="obeSheet_summary"
                     control={methods.control}
                     render={({ field }) => (
                       <DropzoneInput
-                        label="Final grades of the students (Tabulation Sheet)"
-                        id="feedbackFormPdf"
+                        label="Summary of the OBE Sheet (Analysis of Grade Distribution, CO Attainment, PO Attainment, and CQI - plan for Course Improvement"
+                        id="obeSheet_summary"
                         accept="application/pdf"
                         helperText="You can only drop .pdf file here"
                         maxFiles={1}
@@ -91,7 +88,14 @@ export default function Step3({ nextStep, prevStep }) {
                     )}
                   />
                 ) : (
-                  <InstructorFeedback />
+                  <Textarea
+                    id="text_area"
+                    label="CQI Form"
+                    name="text_area"
+                    control={methods.control}
+                    Controller={Controller}
+                    error={methods.formState}
+                  />
                 )}
 
                 <div className="flex justify-between">
@@ -104,7 +108,6 @@ export default function Step3({ nextStep, prevStep }) {
                   </Button>
                   <Button type="submit">Next</Button>
                 </div>
-                
               </form>
             </FormProvider>
           </article>

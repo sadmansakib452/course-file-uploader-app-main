@@ -1,3 +1,4 @@
+
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,11 +15,9 @@ import Textarea from "../Textarea";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-
-
 export default function Step2({ nextStep, prevStep }) {
   const router = useRouter();
-  const [isPdfUpload, setIsPdfUpload] = useState(true); // State to control toggle
+  // State to control toggle
   const { formData, setData, step } = useFormStore();
   const methods = useForm({
     mode: "onTouched",
@@ -29,7 +28,7 @@ export default function Step2({ nextStep, prevStep }) {
   const { handleSubmit, setValue, getValues } = methods;
 
   const onSubmit = async (data) => {
-    console.log(data)
+    console.log(data);
     setData({ step: 2, data });
     nextStep();
   };
@@ -43,60 +42,25 @@ export default function Step2({ nextStep, prevStep }) {
           <article className="py-8 layout">
             <h1>Step 2</h1>
 
-            {/* Toggle Buttons outside the form */}
-            <div className="flex items-center space-x-4 mb-4 mt-5">
-              <Button
-                type="button"
-                onClick={() => {
-                  setIsPdfUpload(true);
-                  setValue("text_area", ""); // Clear text editor content when switching
-                }}
-                disabled={isPdfUpload}
-              >
-                PDF Upload
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  setIsPdfUpload(false);
-                  setValue("identity_card", null); // Clear file input when switching
-                }}
-                disabled={!isPdfUpload}
-              >
-                Text Editor
-              </Button>
-            </div>
-
             <FormProvider {...methods}>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="mt-8 space-y-4"
               >
-                {isPdfUpload ? (
-                  <Controller
-                    name="identity_card"
-                    control={methods.control}
-                    render={({ field }) => (
-                      <DropzoneInput
-                        label="Final grades of the students (Tabulation Sheet)"
-                        id="identity_card"
-                        accept="application/pdf"
-                        helperText="You can only drop .pdf file here"
-                        maxFiles={1}
-                        {...field}
-                      />
-                    )}
-                  />
-                ) : (
-                  <Textarea
-                    id="text_area"
-                    label="CQI Form"
-                    name="text_area"
-                    control={methods.control}
-                    Controller={Controller}
-                    error={methods.formState}
-                  />
-                )}
+                <Controller
+                  name="finalGrades"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <DropzoneInput
+                      label="Final grades of the students (Tabulation Sheet)"
+                      id="finalGrades"
+                      accept="application/pdf"
+                      helperText="You can only drop .pdf file here"
+                      maxFiles={1}
+                      {...field}
+                    />
+                  )}
+                />
 
                 <div className="flex justify-between">
                   <Button
