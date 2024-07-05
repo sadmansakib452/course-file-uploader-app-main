@@ -20,6 +20,7 @@ const MultiStepForm = () => {
   const { step, formData, setStep } = useFormStore();
   const [animationEnabled, setAnimationEnabled] = useState(true);
 
+  const [contentHeight, setContentHeight] = useState("auto");
   const transition = {
     duration: 0.5,
     ease: [0.43, 0.13, 0.23, 0.96],
@@ -100,18 +101,35 @@ const MultiStepForm = () => {
     }
   };
 
+  useEffect(() => {
+    const resizeListener = () => {
+      if (document.getElementById("step-container")) {
+        setContentHeight(
+          `${document.getElementById("step-container").scrollHeight}px`
+        );
+      }
+    };
+
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
+  }, [step]);
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -100 }}
-        transition={transition}
-        key={step}
-        className="max-w-2xl w-full border border-gray-300 rounded "
-      >
-        <div>{renderStep()}</div>
-      </motion.div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-2xl border border-gray-300 rounded shadow-lg bg-white">
+        <motion.div
+          id="step-container"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={transition}
+          key={step}
+          className="p-6 sm:p-8"
+          style={{ minHeight: contentHeight }}
+        >
+          {renderStep()}
+        </motion.div>
+      </div>
     </div>
   );
 };

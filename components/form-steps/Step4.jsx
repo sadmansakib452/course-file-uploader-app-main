@@ -1,96 +1,77 @@
-'use client'
-import { useRouter } from "next/navigation"
-import { FormProvider, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormProvider, useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import useFormStore from "@/store/useFormStore";
+import { stepFourSchema } from "@/lib/yup";
+import Seo from "@/components/Seo";
+import Button from "@/components/Button";
+import DropzoneInput from "@/components/Forms/DropzoneInput";
 
-import useFormStore from "@/store/useFormStore"
-import { stepTwoSchema } from "@/lib/yup"
+import Textarea from "../Textarea";
 
-import Seo from "@/components/Seo"
-import Input from "@/components/Forms/Input"
-import Button from "@/components/Button"
-import UnstyledLink from "@/components/UnstyledLink"
-import DropzoneInput from "@/components/Forms/DropzoneInput"
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
-export default function StepTwoPage() {
-  const router = useRouter()
-
-  const { stepOne, stepTwo, stepThree, stepFour, setData, nextStep, prevStep } = useFormStore()
-
-  // useEffect(() => {
-  //   if (!stepOne) {
-  //     toast.error('Please fill step one first');
-  //     router.push('/form/step-1');
-  //   }
-  // }, [router, stepOne]);
-
-  //#region //? forms ==================================
+export default function Step2({ nextStep, prevStep }) {
+  const router = useRouter();
+ // State to control toggle
+  const { formData, setData, step } = useFormStore();
   const methods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(stepFour),
-    defaultValues: stepFour || {},
+    resolver: yupResolver(stepFourSchema),
+    defaultValues: formData.stepFour || {},
   });
-  const { handleSubmit } = methods
-  //#endregion forms
 
-  //#region //? action ==================================
-  const onSubmit = data => {
-    // eslint-disable-next-line no-console
-    console.log(data)
-    setData({ step: 4, data })
 
-    router.push("/form/step-5")
-  }
-  //#endregion action
+  const { handleSubmit, setValue, getValues } = methods;
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    setData({ step: 2, data });
+    nextStep();
+  };
 
   return (
     <>
-      <Seo templateTitle="Step 4" />
+      <Seo templateTitle="Step 2" />
 
       <main>
-        <section className="bg-gray-100">
-          <article className=" py-16 layout">
+        <section className="bg-white">
+          <article className="py-8 layout">
             <h1>Step 4</h1>
-            <div className="flex items-start mt-4">
-              <UnstyledLink
-                className="p-2 text-lg transition-colors bg-white border border-gray-300 rounded hover:bg-gray-100"
-                onClick={prevStep}
-              >
-                <HiChevronLeft />
-              </UnstyledLink>
-              <UnstyledLink
-                className="p-2 text-lg transition-colors bg-white border border-gray-300 rounded hover:bg-gray-100"
-                onClick={nextStep}
-              >
-                <HiChevronRight />
-              </UnstyledLink>
-            </div>
 
             <FormProvider {...methods}>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className=" mt-8 space-y-4"
+                className="mt-8 space-y-4"
               >
-                {/* <Input id="score_1" label="Score 1" />
-                <Input id="score_2" label="Score 2" />
-                <Input id="score_3" label="Score 3" /> */}
-                {/* <DropzoneInput
-                  label="Final Grades of the students (Tabulation Sheet)"
-                  id="score_file"
-                  accept="image/png, image/jpg, image/jpeg"
-                  helperText="You can only drop .jpg, .jpeg, or .png file here"
-                  maxFiles={3}
-                /> */}
-                <DropzoneInput
-                  label="Instructor Feedback Form"
-                  id="identity_card"
-                  accept="application/pdf"
-                  helperText="You can only drop .pdf file here"
-                  maxFiles={1}
+                <Controller
+                  name="courseOutline"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <DropzoneInput
+                      label="Course Outline (for core course, please collect original version from the Chairperson of the CSE department and all sections must follow the same course outline"
+                      id="courseOutline"
+                      accept="application/pdf"
+                      helperText="You can only drop .pdf file here"
+                      maxFiles={1}
+                      {...field}
+                    />
+                  )}
                 />
 
-                <Button type="submit">Next</Button>
+                <div className="flex justify-between">
+                  <Button
+                    type="button"
+                    onClick={prevStep}
+                    disabled={step === 1}
+                  >
+                    Previous
+                  </Button>
+                  <Button type="submit">Next</Button>
+                </div>
               </form>
             </FormProvider>
           </article>

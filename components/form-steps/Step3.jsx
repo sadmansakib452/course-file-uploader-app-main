@@ -10,13 +10,15 @@ import Button from "@/components/Button";
 import DropzoneInput from "@/components/Forms/DropzoneInput";
 
 import Textarea from "../Textarea";
+import InstructorFeedback from "../InstructorFeedback";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { HiExclamationCircle } from "react-icons/hi";
 
 
 
-export default function Step2({ nextStep, prevStep }) {
+export default function Step3({ nextStep, prevStep }) {
   const router = useRouter();
   const [isPdfUpload, setIsPdfUpload] = useState(true); // State to control toggle
   const { formData, setData, step } = useFormStore();
@@ -26,11 +28,12 @@ export default function Step2({ nextStep, prevStep }) {
     defaultValues: formData.stepThree || {},
   });
 
+   
   const { handleSubmit, setValue, getValues } = methods;
 
   const onSubmit = async (data) => {
     console.log(data);
-    setData({ step: 2, data });
+    setData({ step: 3, data });
     nextStep();
   };
 
@@ -39,7 +42,7 @@ export default function Step2({ nextStep, prevStep }) {
       <Seo templateTitle="Step 3" />
 
       <main>
-        <section className="bg-gray-100">
+        <section className="bg-white">
           <article className="py-8 layout">
             <h1>Step 3</h1>
 
@@ -49,7 +52,7 @@ export default function Step2({ nextStep, prevStep }) {
                 type="button"
                 onClick={() => {
                   setIsPdfUpload(true);
-                  setValue("instructor-feed-back-form-pdf", ""); // Clear text editor content when switching
+                  setValue("feedbackFormPdf", ""); // Clear text editor content when switching
                 }}
                 disabled={isPdfUpload}
               >
@@ -59,7 +62,7 @@ export default function Step2({ nextStep, prevStep }) {
                 type="button"
                 onClick={() => {
                   setIsPdfUpload(false);
-                  setValue("instructor-feed-back-form", null); // Clear file input when switching
+                  setValue("feedbackForm", null); // Clear file input when switching
                 }}
                 disabled={!isPdfUpload}
               >
@@ -74,12 +77,12 @@ export default function Step2({ nextStep, prevStep }) {
               >
                 {isPdfUpload ? (
                   <Controller
-                    name="identity_card"
+                    name="f"
                     control={methods.control}
                     render={({ field }) => (
                       <DropzoneInput
                         label="Final grades of the students (Tabulation Sheet)"
-                        id="identity_card"
+                        id="feedbackFormPdf"
                         accept="application/pdf"
                         helperText="You can only drop .pdf file here"
                         maxFiles={1}
@@ -88,14 +91,7 @@ export default function Step2({ nextStep, prevStep }) {
                     )}
                   />
                 ) : (
-                  <Textarea
-                    id="text_area"
-                    label="CQI Form"
-                    name="text_area"
-                    control={methods.control}
-                    Controller={Controller}
-                    error={methods.formState}
-                  />
+                  <InstructorFeedback />
                 )}
 
                 <div className="flex justify-between">
@@ -108,6 +104,7 @@ export default function Step2({ nextStep, prevStep }) {
                   </Button>
                   <Button type="submit">Next</Button>
                 </div>
+                
               </form>
             </FormProvider>
           </article>

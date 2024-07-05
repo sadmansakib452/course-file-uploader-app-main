@@ -39,7 +39,7 @@ export default function Step2({ nextStep, prevStep }) {
       <Seo templateTitle="Step 2" />
 
       <main>
-        <section className="bg-gray-100">
+        <section className="bg-white">
           <article className="py-8 layout">
             <h1>Step 2</h1>
 
@@ -88,21 +88,15 @@ export default function Step2({ nextStep, prevStep }) {
                     )}
                   />
                 ) : (
-                  
-                
-                <Textarea
+                  <Textarea
                     id="text_area"
                     label="CQI Form"
                     name="text_area"
                     control={methods.control}
                     Controller={Controller}
                     error={methods.formState}
-                    
-                />
-                )
-                
-                
-                }
+                  />
+                )}
 
                 <div className="flex justify-between">
                   <Button
