@@ -5,7 +5,6 @@ import { FormProvider, useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useFormStore from "@/store/useFormStore";
 import { stepThreeSchema } from "@/lib/yup";
-import Seo from "@/components/Seo";
 import Button from "@/components/Button";
 import DropzoneInput from "@/components/Forms/DropzoneInput";
 
@@ -36,7 +35,7 @@ export default function Step3({ nextStep, prevStep }) {
 
   return (
     <>
-      <Seo templateTitle="Step 2" />
+     
 
       <main>
         <section className="bg-white">
